@@ -127,7 +127,7 @@ variable "zonename" {
   default     = ""
 }
 
-variable "port" {
+variable "com_port" {
   type        = string
   description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
   default     = "8443"

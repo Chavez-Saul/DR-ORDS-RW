@@ -1,7 +1,6 @@
 ### Compute ###
-##TODO need to add count index
 resource "null_resource" "remote-exec_init" {
-  depends_on = ["oci_core_instance.ORDS-Comp-Instance"]
+  depends_on = [oci_core_instance.ORDS-Comp-Instance]
 
   provisioner "file" {
     connection {
@@ -34,7 +33,7 @@ resource "null_resource" "remote-exec_init" {
 }
 
 resource "null_resource" "remote-exec_tomcat-1" {
-  depends_on = ["null_resource.remote-exec_init"]
+  depends_on = [null_resource.remote-exec_init]
 
   # if web_srv=1 then tomcat is configured
   count = var.web_srv
@@ -70,7 +69,7 @@ resource "null_resource" "remote-exec_tomcat-1" {
 }
 
 resource "null_resource" "remote-exec_tomcat-2" {
-  depends_on = ["null_resource.remote-exec_tomcat-1"]
+  depends_on = [null_resource.remote-exec_tomcat-1]
 
   # if web_srv=1 then tomcat is configured
   count = var.web_srv
@@ -93,7 +92,7 @@ resource "null_resource" "remote-exec_tomcat-2" {
 }
 
 resource "null_resource" "remote-exec_tomcat-apex" {
-  depends_on = ["null_resource.remote-exec_tomcat-2"]
+  depends_on = [null_resource.remote-exec_tomcat-2]
 
   # if web_srv=1(tomcat)
   count = var.web_srv
@@ -114,7 +113,7 @@ resource "null_resource" "remote-exec_tomcat-apex" {
 }
 
 resource "null_resource" "remote-exec_tomcat-Secure-FQDN-Access" {
-  depends_on = ["null_resource.remote-exec_tomcat-2"]
+  depends_on = [null_resource.remote-exec_tomcat-2]
 
   # if web_srv=1(tomcat) AND Secure_FQDN_access=0(enabling FQDN access), this resource is configured
   count = var.web_srv - (var.Secure_FQDN_access * var.web_srv)
@@ -136,7 +135,7 @@ resource "null_resource" "remote-exec_tomcat-Secure-FQDN-Access" {
 }
 
 resource "null_resource" "remote-exec_tomcat-3" {
-  depends_on = ["null_resource.remote-exec_tomcat-Secure-FQDN-Access"]
+  depends_on = [null_resource.remote-exec_tomcat-Secure-FQDN-Access]
 
   # if web_srv=1(tomcat) AND Secure_FQDN_access=0(enabling FQDN access), this resource is configured
   count = var.web_srv - (var.Secure_FQDN_access * var.web_srv)
@@ -159,7 +158,7 @@ resource "null_resource" "remote-exec_tomcat-3" {
 
 
 resource "null_resource" "remote-exec_jetty-1" {
-  depends_on = ["null_resource.remote-exec_init"]
+  depends_on = [null_resource.remote-exec_init]
 
   count = 1 - var.web_srv # if web_srv=0 then jetty is configured
 
@@ -194,7 +193,7 @@ resource "null_resource" "remote-exec_jetty-1" {
 }
 
 resource "null_resource" "remote-exec_jetty-2" {
-  depends_on = ["null_resource.remote-exec_jetty-1"]
+  depends_on = [null_resource.remote-exec_jetty-1]
 
   count = 1 - var.web_srv # if web_srv=0 then jetty is configured
 
@@ -216,7 +215,7 @@ resource "null_resource" "remote-exec_jetty-2" {
 }
 
 resource "null_resource" "remote-exec_jetty-apex" {
-  depends_on = ["null_resource.remote-exec_jetty-2"]
+  depends_on = [null_resource.remote-exec_jetty-2]
 
   # if web_srv=0(jetty)
   count = 1 - var.web_srv
@@ -237,7 +236,7 @@ resource "null_resource" "remote-exec_jetty-apex" {
 }
 
 resource "null_resource" "remote-exec_jetty-Secure-FQDN-Access" {
-  depends_on = ["null_resource.remote-exec_jetty-2"]
+  depends_on = [null_resource.remote-exec_jetty-2]
 
   # if web_srv=0(jetty) AND Secure_FQDN_access=0(enabling FQDN access), this resource is configured
   count = (1 - var.web_srv) - var.Secure_FQDN_access * (1 - var.web_srv)

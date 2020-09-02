@@ -22,10 +22,10 @@ locals {
 ### destination region resource provisioning ####
 #################################################
 module dr_network {
-  source = "./modules/network"
+  source = "modulesnetwork"
 
   providers = {
-      oci.destination    = "oci.dr"
+      oci.destination    = oci.dr
   }
 
   tenancy_ocid           = var.tenancy_ocid
@@ -43,10 +43,10 @@ module dr_network {
 }
 
 module dr_bastion_instance {
-  source = "./modules/bastion_instance"
+  source = "modulesbastion_instance"
 
   providers = {
-      oci.destination = "oci.dr"
+      oci.destination = oci.dr
   }
 
   tenancy_ocid        = var.tenancy_ocid
@@ -66,10 +66,10 @@ module dr_bastion_instance {
 }
 
 module dr_public_lb {
-  source = "./modules/lb"
+  source = "moduleslb"
 
   providers = {
-      oci.destination          = "oci.dr"
+      oci.destination          = oci.dr
   }
 
   compartment_id      = var.compartment_ocid
@@ -88,10 +88,10 @@ module dr_public_lb {
 ### primary region resource provisioning ####
 #############################################
 module network {
-  source = "./modules/network"
+  source = "modulesnetwork"
 
   providers = {
-      oci.destination    = "oci"
+      oci.destination    = oci
   }
 
   tenancy_ocid           = var.tenancy_ocid
@@ -109,10 +109,10 @@ module network {
 }
 
 module bastion_instance {
-  source = "./modules/bastion_instance"
+  source = "modulesbastion_instance"
 
   providers = {
-      oci.destination = "oci"
+      oci.destination = oci
   }
 
   tenancy_ocid        = var.tenancy_ocid
@@ -132,10 +132,10 @@ module bastion_instance {
 }
 
 module app_server_1 {
-  source = "./modules/server"
+  source = "modulesserver"
 
   providers = {
-      oci.destination    = "oci"
+      oci.destination    = oci
   }
 
   tenancy_ocid        = var.tenancy_ocid
@@ -155,10 +155,10 @@ module app_server_1 {
 }
 
 module app_server_2 {
-  source = "./modules/server"
+  source = "modulesserver"
 
   providers = {
-      oci.destination    = "oci"
+      oci.destination    = oci
   }
 
   tenancy_ocid        = var.tenancy_ocid
@@ -177,7 +177,7 @@ module app_server_2 {
 }
 
 module public_lb {
-  source = "./modules/lb"
+  source = "moduleslb"
 
   compartment_id      = var.compartment_ocid
   subnet_id           = module.network.dr_lb_subnet_id
@@ -190,10 +190,10 @@ module public_lb {
 }
 
 module database {
-  source = "./modules/dbaas"
+  source = "modulesdbaas"
 
   providers = {
-      oci.destination    = "oci"
+      oci.destination    = oci
   }
 
   compartment_id      = var.compartment_ocid
@@ -213,7 +213,7 @@ module database {
 #### ords ######################
 
 module "ords" {
-  source = "./modules/ords"
+  source = "modulesords"
 
   providers = {
     oci.destination = oci
@@ -243,6 +243,6 @@ module "ords" {
   pdb_name            = module.database.pdb_name
   URL_ORDS_file       = var.URL_ORDS_file
   URL_APEX_file       = var.URL_APEX_file
-  com_port            = var.port
+  com_port            = var.com_port
 }
 

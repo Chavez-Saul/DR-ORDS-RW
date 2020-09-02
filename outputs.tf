@@ -51,5 +51,5 @@ output "db_domain" {
 }
 
 output "URL_for_Apex" {
-  value = "http://${module.ords.InstancePublicIP}:${var.port}/ords/${module.database.pdb_name}.${module.database.db_domain}"
+  value = "https://${module.ords.InstancePublicIP}:${var.com_port}/ords/${module.database.pdb_name}"
 }

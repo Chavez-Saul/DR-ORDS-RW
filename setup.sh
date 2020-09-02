@@ -37,15 +37,7 @@ read -p "Enter path to your API private key [${PathToYourApiPrivateKey}]: " APIP
 read -p "Enter your compartment's OCID [${TF_VAR_compartment_ocid}]: " CID 
 echo ""
 
-
 echo "***** Compute Instance *****"
-#read -p "Enter the region <us-phoenix-1|us-ashburn-1|eu-frankfurt-1|uk-london-1|ca-toronto-1> [${TF_VAR_region}]: " REGION
-read -p "Enter the AD <1|2|3> [${TF_VAR_AD}]: " AD
-read -p "Enter the available Oracle Linux 7.X version <7.6|...> [${TF_VAR_InstanceOSVersion}]: " OLVER
-read -p "Enter the subnet's OCID [${TF_VAR_subnet_ocid}]: " SUBNETID
-read -p "Enter the Compute Instance's display name [${TF_VAR_ComputeDisplayName}]: " COMDISPNAME
-read -p "Enter the Compute Instance's hostname [${TF_VAR_InstanceName}]: " COMHOSTNAME
-read -p "Enter the Compute Instance's shape <VM.Standard2.1|VM.Standard2.2|...> [${TF_VAR_InstanceShape}]: " COMSHAPE
 read -p "Enter the Compute Instance's port [${TF_VAR_com_port}]: " COMPORT
 read -p "Enter 0 to run Jetty (ORDS standalone mode), or 1 to run Tomcat [${TF_VAR_web_srv}]: " WEBSRV
 read -p "Enter 0 to access with FQDN (hostname.yourdomain), or 1 to access with public IP address [${TF_VAR_Secure_FQDN_access}]: " COMACCESS
@@ -157,7 +149,7 @@ EOF
       cat <<EOF > outputs-ords.tf
 
 output "URL : APEX (PublicIP)" {
-  value = ["https://\${data.oci_core_vnic.InstanceVnic.public_ip_address}:\${var.com_port}/ords/\${var.target_db_name}/"]
+  value = ["https://\${module.ords.InstancePublicIP}:\${var.com_port}/ords/\${var.target_db_name}/"]
 }
 EOF
   fi
