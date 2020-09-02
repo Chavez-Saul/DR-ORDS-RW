@@ -1,34 +1,38 @@
 ### Path to keys
-PathToYourSshPublicKey=
-PathToYourSshPrivateKey=
-PathToYourApiPrivateKey=
+PathToYourSshPublicKey=/home/opc/.ssh/id_rsa.pub
+PathToYourSshPrivateKey=/home/opc/.ssh/id_rsa
+PathToYourApiPrivateKey=/home/opc/.oci/oci_api_key.pem
 ### Authentication details
-export TF_VAR_tenancy_ocid=
-export TF_VAR_user_ocid=
-export TF_VAR_fingerprint=
+export TF_VAR_tenancy_ocid=ocid1.tenancy.oc1..aaaaaaaampajwjptkttmi3cv6xt5eiwkqbkiqxuwb7kom4lomsbjfpvjuteq
+export TF_VAR_user_ocid=ocid1.user.oc1..aaaaaaaas7z4noc3x2vken4w4hfidvphwa4zqtqvyakk3sfupo262fjmm4kq
+export TF_VAR_fingerprint=86:bd:89:eb:05:50:31:ce:ee:4c:03:92:be:6c:27:77
 export TF_VAR_private_key_path=${PathToYourApiPrivateKey}
 ### Compartment
-export TF_VAR_compartment_ocid=<compartment_ocid>
+export TF_VAR_compartment_ocid=ocid1.compartment.oc1..aaaaaaaafofzhn5ni45serz4yqmweruxmxtkbhe2ie7b234u5hvfiwq6htnq
 ### Public/private keys used on the instances
-export TF_VAR_ssh_public_key=${PathToYourSshPublicKey}
-export TF_VAR_ssh_private_key=${PathToYourSshPrivateKey}
+export TF_VAR_ssh_public_key_file=${PathToYourSshPublicKey}
+export TF_VAR_ssh_private_key_file=${PathToYourSshPrivateKey}
 export TF_VAR_api_private_key=${PathToYourApiPrivateKey}
+### Log
+# export TF_LOG=TRACE
+# export TF_LOG_PATH='./terraform.log'
+### Target Database
+# export TF_VAR_target_db_admin_pw=
 ### Compute Setting
 # TF_VAR_region : us-phoenix-1 | us-ashburn-1 | eu-frankfurt-1 | uk-london-1 | ca-toronto-1
-export TF_VAR_region=
-# TF_VAR_DR_Regions : us-phoenix-1 | us-ashburn-1 | eu-frankfurt-1 | uk-london-1 | ca-toronto-1
-export TF_VAR_dr_region=
+export TF_VAR_region=uk-london-1
 # TF_VAR_URL_ORDS_file : Object Storage URL for ords.war
-export TF_VAR_URL_ORDS_file=
+export TF_VAR_URL_ORDS_file=https://objectstorage.uk-london-1.oraclecloud.com/p/XxIgzihxEAtdZvuL3kOZBYYvNIhZVomtBS0urvrYI38/n/orasenatdecanational01/b/uk-london-1-bucket-dr/o/ords.war
 # TF_VAR_web_srv : 0 => Jetty, 1 => Tomcat
 export TF_VAR_web_srv=0
 # TF_VAR_URL_tomcat_file : Object Storage URL for Tomcat 8.5 tar.gz file, required only when tomcat is used for Web server
 export TF_VAR_URL_tomcat_file=
-export TF_VAR_com_port=
+export TF_VAR_com_port=8888
 # TF_VAR_Secure_FQDN_access : 0 => Yes(Enabled FQDN access with CA SSL), 1 => No(Access w/ IP address)
 export TF_VAR_Secure_FQDN_access=1
 export TF_VAR_ZoneName=
-export TF_VAR_URL_APEX_file=
+export TF_VAR_URL_APEX_file=https://objectstorage.uk-london-1.oraclecloud.com/p/ivsobcgL9dfwsVCSSwOvMee1PBIAmDZOijz8tzt5ATM/n/orasenatdecanational01/b/uk-london-1-bucket-dr/o/apex_20.1.zip
 # TF_VAR_APEX_install_mode : 0 => Full Environment mode, 1 => Runtime Environment mode
 export TF_VAR_APEX_install_mode=0
-
+# TF_VAR_DR_Regions : us-phoenix-1 | us-ashburn-1 | eu-frankfurt-1 | uk-london-1 | ca-toronto-1
+export TF_VAR_dr_region=eu-frankfurt-1

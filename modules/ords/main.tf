@@ -7,7 +7,7 @@ resource "oci_core_instance" "ORDS-Comp-Instance" {
 
   create_vnic_details {
     hostname_label = var.hostname_label
-    subnet_id = var.subnet_id
+    subnet_id      = var.subnet_id
   }
 
   metadata = {

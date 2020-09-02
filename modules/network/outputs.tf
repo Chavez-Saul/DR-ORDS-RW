@@ -11,19 +11,9 @@ output dr_db_subnet_id {
   value       = oci_core_subnet.db_subnet.id
 }
 
-output dr_lb_subnet_id {
-  description = "lb_subnet_id"
-  value       = oci_core_subnet.lb_subnet.id
-}
-
 output dr_access_subnet_id {
   description = "access_subnet_id"
   value       = oci_core_subnet.access_subnet.id
-}
-
-output dr_app_subnet_id {
-  description = "app_subnet_id"
-  value       = oci_core_subnet.app_subnet.id
 }
 
 output dr_ping_all_id {

@@ -6,35 +6,14 @@
 output "dr_bastion" {
   value = module.dr_bastion_instance.dr_instance_ip
 }
-
-output "dr_load_balancer" {
-  value = module.dr_public_lb.dr_lb_ip
-}
-
 ### Primary Region Outputs
 
 output "primary_bastion" {
   value = module.bastion_instance.dr_instance_ip
 }
 
-output "primary_app_server_1" {
-  value = module.app_server_1.instance_ip
-}
-
-output "primary_app_server_2" {
-  value = module.app_server_2.instance_ip
-}
-
-output "primary_load_balancer" {
-  value = module.public_lb.dr_lb_ip
-}
-
 ### ords Information
-output "InstancePrivateIP" {
-  value = module.ords.InstancePrivateIP
-}
-
-output "InstancePublicIP" {
+output "ords_public_ip" {
   value = module.ords.InstancePublicIP
 }
 

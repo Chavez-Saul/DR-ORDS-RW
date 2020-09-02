@@ -20,7 +20,7 @@ data oci_identity_availability_domains ADs {
 
 # Availability Domains for Standby Region
 data oci_identity_availability_domains DR_ADs {
-  provider            = oci.dr
+  provider       = oci.dr
   compartment_id = var.tenancy_ocid
 }
 

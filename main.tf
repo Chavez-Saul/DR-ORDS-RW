@@ -11,10 +11,10 @@ terraform {
 
 locals {
   availability_domain = lookup(data.oci_identity_availability_domains.ADs.availability_domains[0], "name")
-  image_id = data.oci_core_images.oraclelinux.images.0.id
+  image_id            = data.oci_core_images.oraclelinux.images.0.id
 
   dr_availability_domain = lookup(data.oci_identity_availability_domains.DR_ADs.availability_domains[0], "name")
-  dr_image_id = data.oci_core_images.DR_oraclelinux.images.0.id
+  dr_image_id            = data.oci_core_images.DR_oraclelinux.images.0.id
 }
 
 
@@ -22,31 +22,31 @@ locals {
 ### destination region resource provisioning ####
 #################################################
 module dr_network {
-  source = "modulesnetwork"
+  source = "./modules/network"
 
   providers = {
-      oci.destination    = oci.dr
+    oci.destination = oci.dr
   }
 
-  tenancy_ocid           = var.tenancy_ocid
-  compartment_id         = var.compartment_ocid
-  vcn_name               = var.vcn_dns_label
-  dns_label              = var.vcn_dns_label
-  vcn_cidr_block         = var.dr_vcn_cidr_block
-  remote_app_vcn_cidr    = var.vcn_cidr_block
-  freeform_tags          = var.freeform_tags
-  defined_tags           = var.defined_tags
-  create_remote_peering  = true
+  tenancy_ocid          = var.tenancy_ocid
+  compartment_id        = var.compartment_ocid
+  vcn_name              = var.vcn_dns_label
+  dns_label             = var.vcn_dns_label
+  vcn_cidr_block        = var.dr_vcn_cidr_block
+  remote_app_vcn_cidr   = var.vcn_cidr_block
+  freeform_tags         = var.freeform_tags
+  defined_tags          = var.defined_tags
+  create_remote_peering = true
 
-  remote_peering_connection_id  = null
+  remote_peering_connection_id               = null
   remote_peering_connection_peer_region_name = null
 }
 
 module dr_bastion_instance {
-  source = "modulesbastion_instance"
+  source = "./modules/bastion_instance"
 
   providers = {
-      oci.destination = oci.dr
+    oci.destination = oci.dr
   }
 
   tenancy_ocid        = var.tenancy_ocid
@@ -61,58 +61,39 @@ module dr_bastion_instance {
   ssh_public_key_file  = var.ssh_public_key_file
   ssh_private_key_file = var.ssh_private_key_file
 
-  freeform_tags          = var.freeform_tags
-  defined_tags           = var.defined_tags
+  freeform_tags = var.freeform_tags
+  defined_tags  = var.defined_tags
 }
-
-module dr_public_lb {
-  source = "moduleslb"
-
-  providers = {
-      oci.destination          = oci.dr
-  }
-
-  compartment_id      = var.compartment_ocid
-  subnet_id           = module.dr_network.dr_lb_subnet_id
-  display_name        = var.lb_display_name
-  is_private          = var.is_private_lb
-  shape               = var.lb_shape
-  instance1_private_ip = null
-  instance2_private_ip = null
-  add_backend_set     = false
-}
-
-
 
 #############################################
 ### primary region resource provisioning ####
 #############################################
 module network {
-  source = "modulesnetwork"
+  source = "./modules/network"
 
   providers = {
-      oci.destination    = oci
+    oci.destination = oci
   }
 
-  tenancy_ocid           = var.tenancy_ocid
-  compartment_id         = var.compartment_ocid
-  vcn_name               = var.vcn_dns_label
-  dns_label              = var.vcn_dns_label
-  vcn_cidr_block         = var.vcn_cidr_block
-  remote_app_vcn_cidr    = var.dr_vcn_cidr_block
-  freeform_tags          = var.freeform_tags
-  defined_tags           = var.defined_tags
+  tenancy_ocid        = var.tenancy_ocid
+  compartment_id      = var.compartment_ocid
+  vcn_name            = var.vcn_dns_label
+  dns_label           = var.vcn_dns_label
+  vcn_cidr_block      = var.vcn_cidr_block
+  remote_app_vcn_cidr = var.dr_vcn_cidr_block
+  freeform_tags       = var.freeform_tags
+  defined_tags        = var.defined_tags
 
-  create_remote_peering  = false
-  remote_peering_connection_id  = module.dr_network.dr_remote_peering_id
+  create_remote_peering                      = false
+  remote_peering_connection_id               = module.dr_network.dr_remote_peering_id
   remote_peering_connection_peer_region_name = var.dr_region
 }
 
 module bastion_instance {
-  source = "modulesbastion_instance"
+  source = "./modules/bastion_instance"
 
   providers = {
-      oci.destination = oci
+    oci.destination = oci
   }
 
   tenancy_ocid        = var.tenancy_ocid
@@ -127,73 +108,16 @@ module bastion_instance {
   ssh_public_key_file  = var.ssh_public_key_file
   ssh_private_key_file = var.ssh_private_key_file
 
-  freeform_tags          = var.freeform_tags
-  defined_tags           = var.defined_tags
+  freeform_tags = var.freeform_tags
+  defined_tags  = var.defined_tags
 }
 
-module app_server_1 {
-  source = "modulesserver"
-
-  providers = {
-      oci.destination    = oci
-  }
-
-  tenancy_ocid        = var.tenancy_ocid
-  compartment_id      = var.compartment_ocid
-  source_id           = local.image_id
-  subnet_id           = module.network.dr_app_subnet_id
-  availability_domain = local.availability_domain
-  bastion_ip          = module.bastion_instance.dr_instance_ip
-  display_name        = var.appserver_1_display_name
-  hostname_label      = var.appserver_1_display_name
-  shape               = var.app_server_shape
-  ping_all_id         = module.network.dr_ping_all_id
-
-  ssh_private_key_file = var.ssh_private_key_file
-  ssh_public_key_file   = var.ssh_public_key_file
-
-}
-
-module app_server_2 {
-  source = "modulesserver"
-
-  providers = {
-      oci.destination    = oci
-  }
-
-  tenancy_ocid        = var.tenancy_ocid
-  compartment_id      = var.compartment_ocid
-  source_id           = local.image_id
-  subnet_id           = module.network.dr_app_subnet_id
-  availability_domain = local.availability_domain
-  bastion_ip          = module.bastion_instance.dr_instance_ip
-  display_name        = var.appserver_2_display_name
-  hostname_label      = var.appserver_2_display_name
-  shape               = var.app_server_shape
-  ping_all_id         = module.network.dr_ping_all_id
-
-  ssh_private_key_file = var.ssh_private_key_file
-  ssh_public_key_file   = var.ssh_public_key_file
-}
-
-module public_lb {
-  source = "moduleslb"
-
-  compartment_id      = var.compartment_ocid
-  subnet_id           = module.network.dr_lb_subnet_id
-  display_name        = var.lb_display_name
-  is_private          = var.is_private_lb
-  shape               = var.lb_shape
-  instance1_private_ip = module.app_server_1.instance_ip
-  instance2_private_ip = module.app_server_2.instance_ip
-  add_backend_set     = true
-}
 
 module database {
-  source = "modulesdbaas"
+  source = "./modules/dbaas"
 
   providers = {
-      oci.destination    = oci
+    oci.destination = oci
   }
 
   compartment_id      = var.compartment_ocid
@@ -205,15 +129,15 @@ module database {
   db_system_shape     = var.db_system_shape
   db_admin_password   = var.db_admin_password
 
-  remote_subnet_id    = module.dr_network.dr_db_subnet_id
-  remote_nsg_ids      = module.dr_network.dr_ping_all_id
+  remote_subnet_id           = module.dr_network.dr_db_subnet_id
+  remote_nsg_ids             = module.dr_network.dr_ping_all_id
   remote_availability_domain = local.dr_availability_domain
 }
 ##############################################
 #### ords ######################
 
 module "ords" {
-  source = "modulesords"
+  source = "./modules/ords"
 
   providers = {
     oci.destination = oci

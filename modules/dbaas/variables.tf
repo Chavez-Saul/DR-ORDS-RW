@@ -31,7 +31,7 @@ variable "db_system_shape" {
 variable "db_edition" {
   type        = string
   description = "Oracle Database Edition that applies to all the databases on the DB system."
-  default = "ENTERPRISE_EDITION_EXTREME_PERFORMANCE"
+  default     = "ENTERPRISE_EDITION_EXTREME_PERFORMANCE"
 }
 
 variable "db_admin_password" {
@@ -42,85 +42,85 @@ variable "db_admin_password" {
 variable "db_name" {
   type        = string
   description = "database display name"
-  default = "drdb"
+  default     = "drdb"
 }
 
 variable "db_version" {
   type        = string
   description = "A valid Oracle Database version."
-  default = "19.0.0.0"
+  default     = "19.0.0.0"
 }
 
 variable "db_home_display_name" {
   type        = string
   description = "The user-friendly name for the DB system."
-  default = "DRDBHome"
+  default     = "DRDBHome"
 }
 
 variable "db_disk_redundancy" {
   type        = string
   description = "The type of redundancy configured for the DB system."
-  default = "NORMAL"
+  default     = "NORMAL"
 }
 
 variable "db_backup_enabled" {
   type        = string
   description = "if set to true configures automatic backup"
-  default = "false"
+  default     = "false"
 }
 
 variable "sparse_diskgroup" {
   type        = string
   description = "Sparse Diskgroup is configured for Exadata dbsystem. If False, Sparse diskgroup is not configured."
-  default = true
+  default     = true
 }
 
 variable "db_system_display_name" {
   type        = string
   description = "The user-friendly name for the DB system."
-  default = "DRDBSystem"
+  default     = "DRDBSystem"
 }
 
 variable "hostname" {
   type        = string
   description = "The hostname for the DB system."
-  default = "drdb"
+  default     = "drdb"
 }
 
 variable "n_character_set" {
   type        = string
   description = "The character set for the database."
-  default = "AL16UTF16"
+  default     = "AL16UTF16"
 }
 
 variable "character_set" {
   type        = string
   description = "The national character set for the database."
-  default = "AL32UTF8"
+  default     = "AL32UTF8"
 }
 
 variable "db_workload" {
   type        = string
   description = "The database workload type."
-  default = "OLTP"
+  default     = "OLTP"
 }
 
 variable "pdb_name" {
   type        = string
   description = "The name of the pluggable database."
-  default = "drpdb"
+  default     = "drpdb"
 }
 
 variable "data_storage_size_in_gb" {
   type        = string
   description = "The data storage size, in gigabytes, that is currently available to the DB system. Applies only for virtual machine DB systems."
-  default = "512"
+  default     = "512"
 }
 
 variable "license_model" {
   type        = string
   description = "The Oracle license model that applies to all the databases on the DB system. The default is LICENSE_INCLUDED."
-  default = "LICENSE_INCLUDED"
+  default     = "LICENSE_INCLUDED"
 }
 
 variable ping_all_id {
@@ -131,7 +131,7 @@ variable ping_all_id {
 variable "node_count" {
   type        = string
   description = "The number of nodes in the DB system. For RAC DB systems, the value is greater than 1."
-  default = "1"
+  default     = "1"
 }
 
 variable "remote_subnet_id" {

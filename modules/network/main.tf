@@ -11,17 +11,15 @@ provider oci {
 
 # Availability Domains
 data oci_identity_availability_domains AD {
-  provider = oci.destination
+  provider       = oci.destination
   compartment_id = var.tenancy_ocid
 }
 
 locals {
   // VCN is /16
-  vcn_subnet_cidr_offset  = 8
-  bastion_subnet_prefix   = "${cidrsubnet("${var.vcn_cidr_block}", local.vcn_subnet_cidr_offset, 0)}"
-  lb_subnet_prefix        = "${cidrsubnet("${var.vcn_cidr_block}", local.vcn_subnet_cidr_offset, 1)}"
-  app_subnet_prefix       = "${cidrsubnet("${var.vcn_cidr_block}", local.vcn_subnet_cidr_offset, 3)}"
-  db_subnet_prefix        = "${cidrsubnet("${var.vcn_cidr_block}", local.vcn_subnet_cidr_offset, 4)}"
+  vcn_subnet_cidr_offset = 8
+  bastion_subnet_prefix  = "${cidrsubnet("${var.vcn_cidr_block}", local.vcn_subnet_cidr_offset, 0)}"
+  db_subnet_prefix       = "${cidrsubnet("${var.vcn_cidr_block}", local.vcn_subnet_cidr_offset, 4)}"
 }
 
 /*
@@ -30,7 +28,7 @@ locals {
 
 # VCN
 resource oci_core_vcn dr_vcn {
-  provider       = oci.destination 
+  provider = oci.destination
 
   compartment_id = var.compartment_id
   display_name   = var.vcn_name
@@ -42,7 +40,7 @@ resource oci_core_vcn dr_vcn {
 
 # Internet Gateway
 resource oci_core_internet_gateway dr_igw {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = var.igw_name
@@ -52,7 +50,7 @@ resource oci_core_internet_gateway dr_igw {
 
 # NAT Gateway
 resource oci_core_nat_gateway dr_nat {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = var.nat_name
@@ -61,7 +59,7 @@ resource oci_core_nat_gateway dr_nat {
 }
 
 data "oci_core_services" "dr_services" {
-  provider            = oci.destination
+  provider = oci.destination
   filter {
     name   = "name"
     values = ["All .* Services In Oracle Services Network"]
@@ -71,7 +69,7 @@ data "oci_core_services" "dr_services" {
 
 # Service Gateway
 resource "oci_core_service_gateway" "dr_service_gateway" {
-  provider            = oci.destination
+  provider = oci.destination
   #Required
   compartment_id = var.compartment_id
 
@@ -79,37 +77,37 @@ resource "oci_core_service_gateway" "dr_service_gateway" {
     service_id = lookup(data.oci_core_services.dr_services.services[0], "id")
   }
 
-  vcn_id = oci_core_vcn.dr_vcn.id
-  display_name   = var.sgw_name
+  vcn_id       = oci_core_vcn.dr_vcn.id
+  display_name = var.sgw_name
 }
 
 # Dynamic Routing Gateway
 resource "oci_core_drg" "dr_drg" {
   depends_on = [oci_core_vcn.dr_vcn]
 
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
 
-  display_name   = var.drg_name
-  defined_tags   = var.defined_tags
-  freeform_tags  = var.freeform_tags
+  display_name  = var.drg_name
+  defined_tags  = var.defined_tags
+  freeform_tags = var.freeform_tags
 }
 
 # Attachmennt of Dynamic Routing Gateway
 resource "oci_core_drg_attachment" "dr_drg_attachment" {
-    depends_on = [oci_core_vcn.dr_vcn, oci_core_drg.dr_drg]
+  depends_on = [oci_core_vcn.dr_vcn, oci_core_drg.dr_drg]
 
-    provider            = oci.destination
+  provider = oci.destination
 
-    drg_id = oci_core_drg.dr_drg.id
-    vcn_id = oci_core_vcn.dr_vcn.id
+  drg_id = oci_core_drg.dr_drg.id
+  vcn_id = oci_core_vcn.dr_vcn.id
 
-    display_name = var.drg_attachment_name
+  display_name = var.drg_attachment_name
 }
 
 # Route Table for the lb subnet with IGW
 resource oci_core_route_table public_route_table {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = var.public_rte_name
@@ -122,18 +120,16 @@ resource oci_core_route_table public_route_table {
   }
 }
 
-# TODO: NSG only needs to be created once for the VCN
-
 # Ping port uses across all VNICS: 
 resource oci_core_network_security_group ping_all {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = "ping_all"
 }
 
 resource "oci_core_network_security_group_security_rule" "ping_all" {
-  provider            = oci.destination
+  provider                  = oci.destination
   network_security_group_id = oci_core_network_security_group.ping_all.id
 
   description = "Ping across all instances"
@@ -145,7 +141,7 @@ resource "oci_core_network_security_group_security_rule" "ping_all" {
 
 # Route Table for the subnet with NAT
 resource oci_core_route_table private_route_table {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = var.private_rte_name
@@ -172,51 +168,10 @@ resource oci_core_route_table private_route_table {
   }
 }
 
-# Network Security List for the lb Subnet
-resource oci_core_security_list dr_lb_security_list {
-  provider            = oci.destination
-  compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.dr_vcn.id
-  display_name   = var.lb_sec_list
-  defined_tags   = var.defined_tags
-  freeform_tags  = var.freeform_tags
-
-  // allow outbound tcp traffic on all ports
-  egress_security_rules {
-    destination = "0.0.0.0/0"
-    protocol    = "6"
-  }
-
-  // allow inbound icmp traffic of a specific type
-  ingress_security_rules {
-    protocol = 1
-    source   = "0.0.0.0/0"
-  }
-
-  // allow inbound HTTP traffic
-  ingress_security_rules {
-    tcp_options {
-      min = "80"
-      max = "80"
-    }
-    protocol = "6"
-    source   = "0.0.0.0/0"
-  }
-
-  // allow inbound HTTP traffic
-  ingress_security_rules {
-    tcp_options {
-      min = "443"
-      max = "443"
-    }
-    protocol = "6"
-    source   = "0.0.0.0/0"
-  }
-}
 
 # Network Security List for the Access (bastion) Subnet
 resource oci_core_security_list access_security_list {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = "access_security_list"
@@ -254,11 +209,21 @@ resource oci_core_security_list access_security_list {
     protocol = "6"
     source   = "0.0.0.0/0"
   }
+
+  // allow ords traffic
+  ingress_security_rules {
+    tcp_options {
+      min = var.com_port
+      max = var.com_port
+    }
+    protocol = "6"
+    source   = "0.0.0.0/0"
+  }
 }
 
 # Network Security List for the Database Subnet
 resource oci_core_security_list dr_database_sec_list {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = "dr_db_sec_list"
@@ -290,11 +255,21 @@ resource oci_core_security_list dr_database_sec_list {
     protocol = "6"
     source   = var.remote_app_vcn_cidr
   }
+
+  // allow ords traffic
+  ingress_security_rules {
+    tcp_options {
+      min = var.com_port
+      max = var.com_port
+    }
+    protocol = "6"
+    source   = "0.0.0.0/0"
+  }
 }
 
 # Network Security List for the Application Subnet
 resource oci_core_security_list dr_app_list {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = "dr_app_sec_list"
@@ -330,7 +305,7 @@ resource oci_core_security_list dr_app_list {
 
 # Network Security List for Mounting FSS
 resource oci_core_security_list dr_fss_list {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = "dr_fss_sec_list"
@@ -369,7 +344,7 @@ resource oci_core_security_list dr_fss_list {
 
 # Access (bastion) Subnet
 resource oci_core_subnet access_subnet {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = var.access_subnet_name
@@ -386,7 +361,7 @@ resource oci_core_subnet access_subnet {
 
 # dr db Subnet
 resource oci_core_subnet db_subnet {
-  provider            = oci.destination
+  provider       = oci.destination
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.dr_vcn.id
   display_name   = var.db_subnet_name
@@ -402,64 +377,28 @@ resource oci_core_subnet db_subnet {
   freeform_tags              = var.freeform_tags
 }
 
-# dr app Subnet
-resource oci_core_subnet app_subnet {
-  provider            = oci.destination
-  compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.dr_vcn.id
-  display_name   = var.app_subnet_name
-  dns_label      = var.app_subnet_dns_label
-  cidr_block     = local.app_subnet_prefix
-  route_table_id = oci_core_route_table.private_route_table.id
-  security_list_ids = [
-    oci_core_vcn.dr_vcn.default_security_list_id,
-    oci_core_security_list.dr_app_list.id,
-    oci_core_security_list.dr_fss_list.id
-  ]
-  prohibit_public_ip_on_vnic = true
-  defined_tags               = var.defined_tags
-  freeform_tags              = var.freeform_tags
-}
-
-# dr lb Subnets
-resource oci_core_subnet lb_subnet {
-  provider            = oci.destination
-  compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.dr_vcn.id
-  display_name   = var.lb_subnet_name
-  dns_label      = var.lb_subnet_dns_label
-  cidr_block     = local.lb_subnet_prefix
-  route_table_id = oci_core_route_table.public_route_table.id
-  security_list_ids = [
-    oci_core_vcn.dr_vcn.default_security_list_id,
-    oci_core_security_list.access_security_list.id
-  ]
-  defined_tags               = var.defined_tags
-  freeform_tags              = var.freeform_tags
-}
-
 # create remote peering connection
 resource "oci_core_remote_peering_connection" "dr_remote_peering_connection" {
-    count = var.create_remote_peering ? 1 : 0
+  count = var.create_remote_peering ? 1 : 0
 
-    depends_on = [oci_core_vcn.dr_vcn, oci_core_drg.dr_drg, oci_core_drg_attachment.dr_drg_attachment]
-    provider            = oci.destination
+  depends_on = [oci_core_vcn.dr_vcn, oci_core_drg.dr_drg, oci_core_drg_attachment.dr_drg_attachment]
+  provider   = oci.destination
 
-    compartment_id = var.compartment_id
-    drg_id = oci_core_drg.dr_drg.id
+  compartment_id = var.compartment_id
+  drg_id         = oci_core_drg.dr_drg.id
 }
 
 # create and setup remote peering connection
 resource "oci_core_remote_peering_connection" "dr_remote_peering_setup" {
-    count = var.create_remote_peering ? 0 : 1
+  count = var.create_remote_peering ? 0 : 1
 
-    depends_on = [oci_core_vcn.dr_vcn, oci_core_drg.dr_drg, oci_core_drg_attachment.dr_drg_attachment]
-    provider            = oci.destination
+  depends_on = [oci_core_vcn.dr_vcn, oci_core_drg.dr_drg, oci_core_drg_attachment.dr_drg_attachment]
+  provider   = oci.destination
 
-    compartment_id = var.compartment_id
-    drg_id = oci_core_drg.dr_drg.id
+  compartment_id = var.compartment_id
+  drg_id         = oci_core_drg.dr_drg.id
 
-    display_name = var.peering_name
-    peer_id = var.remote_peering_connection_id
-    peer_region_name = var.remote_peering_connection_peer_region_name
+  display_name     = var.peering_name
+  peer_id          = var.remote_peering_connection_id
+  peer_region_name = var.remote_peering_connection_peer_region_name
 }

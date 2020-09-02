@@ -40,7 +40,7 @@ resource "oci_database_db_system" "db_system" {
   license_model           = var.license_model
   node_count              = var.node_count
   nsg_ids = [
-      var.ping_all_id
+    var.ping_all_id
   ]
 }
 
@@ -62,9 +62,9 @@ data "oci_database_databases" "db" {
 # Get the nodes of a database system
 data "oci_database_db_nodes" "nodes" {
   compartment_id = var.compartment_id
-  db_system_id = oci_database_db_system.db_system.id
+  db_system_id   = oci_database_db_system.db_system.id
 
-    filter {
+  filter {
     name   = "hostname"
     values = [var.db_name]
   }
@@ -77,7 +77,7 @@ data "oci_database_db_node" "node_info" {
 }
 
 # Get the ip of the node
-data "oci_core_vnic" "node_ip"{
+data "oci_core_vnic" "node_ip" {
   vnic_id = data.oci_database_db_node.node_info.vnic_id
 }
 

@@ -91,18 +91,6 @@ variable private_rte_name {
   default     = "private_rte"
 }
 
-variable app_sec_list {
-  type        = string
-  description = "seclist to open ports for oke worker nodes"
-  default     = "dr_sec_list"
-}
-
-variable lb_sec_list {
-  type        = string
-  description = "seclist to open ports for oke load balancers"
-  default     = "lb_sec_list"
-}
-
 variable access_subnet_name {
   type        = string
   description = "Access Subnet display name"
@@ -127,28 +115,11 @@ variable db_subnet_dns_label {
   default     = "db"
 }
 
-variable app_subnet_name {
-  type        = string
-  description = "app Subnet display name"
-  default     = "app subnet"
-}
 
 variable app_subnet_dns_label {
   type        = string
   description = "App Subnet display name"
   default     = "app"
-}
-
-variable lb_subnet_name {
-  type        = string
-  description = "lb Subnet display name"
-  default     = "lb subnet"
-}
-
-variable lb_subnet_dns_label {
-  type        = string
-  description = "lb Subnet display name"
-  default     = "lb"
 }
 
 variable peering_name {

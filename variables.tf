@@ -25,8 +25,8 @@ variable "dr_region" {
 variable "freeform_tags" {
   type        = map
   description = "map of freeform tags to apply to all resources"
-  default     = {
-    "Environment" =  "dr"
+  default = {
+    "Environment" = "dr"
   }
 }
 
@@ -49,18 +49,18 @@ variable "vcn_cidr_block" {
 }
 
 variable "vcn_dns_label" {
-    description = "DNS label for Virtual Cloud Network (VCN)"
-    default = "drvcn"
+  description = "DNS label for Virtual Cloud Network (VCN)"
+  default     = "drvcn"
 }
 
 variable "lb_display_name" {
-	description = "Display label for Load Balancer"
-	default = "dr_public_lb"
+  description = "Display label for Load Balancer"
+  default     = "dr_public_lb"
 }
 
 variable "is_private_lb" {
-	description = "Display label for Load Balancer"
-	default = "false"
+  description = "Display label for Load Balancer"
+  default     = "false"
 }
 
 variable "ssh_public_key_file" {
@@ -71,7 +71,7 @@ variable "ssh_public_key_file" {
 variable "ssh_private_key_file" {
   type        = string
   description = "path to private ssh key to acccess all instance in the deployed environment"
-} 
+}
 
 variable bastion_server_shape {
   type        = string
@@ -89,7 +89,7 @@ variable "appserver_2_display_name" {
   type        = string
   description = "display name of app server2"
   default     = "app2"
-} 
+}
 
 
 variable app_server_shape {

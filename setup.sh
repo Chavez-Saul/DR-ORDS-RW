@@ -137,22 +137,6 @@ fi
 
 ### Checking retrun code
 if [ $? -eq 0 ];then
-  # generating outputs-ords.tf
-  if [ "${COMACCESS}" = "0" ] && [ "${APEXINSTMODE}" = "0" ]; then
-      cat <<EOF > outputs-ords.tf
-
-output "URL : APEX (FQDN)" {
-  value = ["https://\${var.InstanceName}.\${element(concat(oci_dns_zone.ORDS-Zone.*.name, list("")), 0)}:\${var.com_port}/ords/\${var.target_db_name}/"]
-}
-EOF
-  elif [ "${COMACCESS}" = "1" ] && [ "${APEXINSTMODE}" = "0" ]; then    
-      cat <<EOF > outputs-ords.tf
-
-output "URL : APEX (PublicIP)" {
-  value = ["https://\${module.ords.InstancePublicIP}:\${var.com_port}/ords/\${var.target_db_name}/"]
-}
-EOF
-  fi
 
   rm env-vars
   mv .new_env-vars_${stamp} env-vars
