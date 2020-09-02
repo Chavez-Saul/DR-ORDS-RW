@@ -62,6 +62,11 @@ data "oci_database_databases" "db" {
 data "oci_database_db_nodes" "nodes" {
   compartment_id = var.compartment_id
   db_system_id = oci_database_db_system.db_system.id
+
+    filter {
+    name   = "hostname"
+    values = [var.db_name]
+  }
 }
 data "oci_database_db_node" "node_info" {
 

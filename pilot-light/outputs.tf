@@ -44,3 +44,6 @@ output "DB_hostname" {
 output "drip" {
   value = module.database.ip
 }
+output "domain" {
+  value = module.database.db_domain
+}

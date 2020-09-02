@@ -8,6 +8,9 @@ variable "fingerprint" {}
 variable "private_key_path" {}
 variable "region" {}
 
+variable "URL_APEX_file" {}
+variable "URL_ORDS_file" {}
+
 # Deployment variables
 variable "compartment_ocid" {
   type        = string
@@ -118,3 +121,8 @@ variable lb_shape {
   default     = "100Mbps"
 }
 
+variable "ZoneName" {
+  type        = string
+  description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
+  default     = ""
+}

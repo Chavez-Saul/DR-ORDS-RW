@@ -2,3 +2,4 @@ terra*
 .terraform*
 assets*
 .idea*
+env-vars*
