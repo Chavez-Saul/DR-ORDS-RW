@@ -1,5 +1,5 @@
-terra*
+*.sample
 .terraform*
 assets*
 .idea*
-env-vars*
+*.bkp
