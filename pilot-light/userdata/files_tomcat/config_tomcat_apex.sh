@@ -4,8 +4,8 @@
 # Arg1 : Target db's admin pw
 # Arg2 : Target db's IP address, whether public or private is ok as long as it is reachable from compute isntance
 # Arg3 : Target db's service name to connect
-# Arg4 : Compute IP address for ORDS
-# Arg5 : Compute port for access for ORDS
+# Arg4 : Compute IP address for ords
+# Arg5 : Compute port for access for ords
 # Arg6 : Object Storage URL for APEX zip file
 # Arg7 : Install mode: 0(full development) or 1(runtime)
 
@@ -82,7 +82,7 @@ sed -i -e "s/ToBeUpdated_DBName/${DBName}/g" apex_setup.exp
 
 expect apex_setup.exp
 
-# Validate ORDS
+# Validate ords
 cp ords_validate_base.exp ords_validate.exp
 sed -i -e "s/ToBeUpdated_DBAdmPwd/${DBAdmPwd}/g" ords_validate.exp
 sed -i -e "s/ToBeUpdated_DBSystemIP/${DBSystemIP}/g" ords_validate.exp

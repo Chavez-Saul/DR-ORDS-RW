@@ -59,6 +59,7 @@ data "oci_database_databases" "db" {
   db_home_id     = data.oci_database_db_homes.t.db_homes.0.db_home_id
 }
 
+# Get the nodes of a database system
 data "oci_database_db_nodes" "nodes" {
   compartment_id = var.compartment_id
   db_system_id = oci_database_db_system.db_system.id
@@ -68,12 +69,15 @@ data "oci_database_db_nodes" "nodes" {
     values = [var.db_name]
   }
 }
+
+# Get the first node from the database system
 data "oci_database_db_node" "node_info" {
 
   db_node_id = data.oci_database_db_nodes.nodes.db_nodes.0.id
 }
 
-data "oci_core_vnic" "test_node"{
+# Get the ip of the node
+data "oci_core_vnic" "node_ip"{
   vnic_id = data.oci_database_db_node.node_info.vnic_id
 }
 

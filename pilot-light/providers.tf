@@ -4,7 +4,7 @@
 ### Primary Region provider
 provider "oci" {
   alias            = "home"
-  region           = "${lookup(data.oci_identity_regions.home-region.regions[0], "name")}"
+  region           = lookup(data.oci_identity_regions.home-region.regions[0], "name")
   tenancy_ocid     = var.tenancy_ocid
   user_ocid        = var.user_ocid
   fingerprint      = var.fingerprint

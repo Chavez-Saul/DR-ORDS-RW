@@ -72,7 +72,7 @@ variable "HostUserName" {
 }
 
 # Web Server Flag:
-#    0 => Jetty in ORDS
+#    0 => Jetty in ords
 #    1 => Apach Tomcat
 variable "web_srv" {
   default = "0"

@@ -65,7 +65,7 @@ fi
 #echo $DBName
 #echo $MODE
 
-# Check if ORDS is already setup or not.
+# Check if ords is already setup or not.
 ords_check=`sqlplus -s sys/"${DBAdmPwd}"@${DBSystemIP}/${DBSrv} as sysdba @ords_pu_check | sed -e '/^$/d' -e 's/^[ \t]*//'`
 if [ "$ords_check" = "0" ]; then
   echo "ORDS has not configured for $DBName yet"
@@ -90,7 +90,7 @@ cp pw_verify_base.sql pw_verify_back.sql
 sed -i -e "s/ToBeUpdated_PW_VERIFY_FUNC/$CURRENT_PW_VERIFY_FUNC/g" pw_verify_back.sql
 sqlplus -s sys/"${DBAdmPwd}"@${DBSystemIP}/${DBSrv} as sysdba @pw_verify_null
 
-# Setup ORDS for target DB
+# Setup ords for target DB
 if [ "$ORDS_CONFIG" = "yet" ]; then
   cp ords_setup_base.exp ords_setup.exp
   sed -i -e "s/ToBeUpdated_DBAdmPwd/${DBAdmPwd}/g" ords_setup.exp
@@ -145,7 +145,7 @@ sed -i -e "s/ToBeUpdated_DBName/${DBName}/g" apex_setup.exp
 
 expect apex_setup.exp
 
-# Validate ORDS
+# Validate ords
 cp ords_validate_base.exp ords_validate.exp
 sed -i -e "s/ToBeUpdated_DBAdmPwd/${DBAdmPwd}/g" ords_validate.exp
 sed -i -e "s/ToBeUpdated_DBSystemIP/${DBSystemIP}/g" ords_validate.exp
@@ -167,7 +167,7 @@ if [ $chk_result -eq 0 ]; then
   ls -l ${tomcat_dir}/ords.war
 fi
 
-# Restart ORDS if ORDS is not running with apex mode
+# Restart ords if ords is not running with apex mode
 if [ ! $chk_result -eq 0 ]; then
   # Wait for 10 sec
   sleep 10

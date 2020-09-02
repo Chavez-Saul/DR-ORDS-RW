@@ -210,10 +210,10 @@ module database {
   remote_availability_domain = local.dr_availability_domain
 }
 ##############################################
-#### ORDS ######################
+#### ords ######################
 
 module "ords" {
-  source = "./modules/ORDS"
+  source = "./modules/ords"
 
   providers = {
     oci.destination = oci
@@ -228,20 +228,21 @@ module "ords" {
   source_id           = local.image_id
   ssh_public_key      = file(var.ssh_public_key_file)
   ssh_private_key     = file(var.ssh_private_key_file)
-  ZoneName = var.ZoneName
-  api_private_key = var.private_key_path
-  compartment_ocid = var.compartment_ocid
-  fingerprint = var.fingerprint
-  private_key_path = var.private_key_path
-  region = var.region
-  subnet_ocid = module.dr_network.dr_db_subnet_id
-  target_db_admin_pw = var.db_admin_password
-  target_db_ip = module.database.ip
-  target_db_name = module.database.db_hostname
-  target_db_srv_name = "${module.database.pdb_name}.${module.database.db_domain}"
-  user_ocid = var.user_ocid
-  pdb_name = module.database.pdb_name
-  URL_ORDS_file = var.URL_ORDS_file
-  URL_APEX_file = var.URL_APEX_file
+  ZoneName            = var.zonename
+  api_private_key     = var.private_key_path
+  compartment_ocid    = var.compartment_ocid
+  fingerprint         = var.fingerprint
+  private_key_path    = var.private_key_path
+  region              = var.region
+  subnet_ocid         = module.dr_network.dr_db_subnet_id
+  target_db_admin_pw  = var.db_admin_password
+  target_db_ip        = module.database.db_node_private_ip
+  target_db_name      = module.database.db_hostname
+  target_db_srv_name  = "${module.database.pdb_name}.${module.database.db_domain}"
+  user_ocid           = var.user_ocid
+  pdb_name            = module.database.pdb_name
+  URL_ORDS_file       = var.URL_ORDS_file
+  URL_APEX_file       = var.URL_APEX_file
+  com_port            = var.port
 }
 

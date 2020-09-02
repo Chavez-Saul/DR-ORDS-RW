@@ -32,7 +32,7 @@ else
   usage_exit
 fi
 
-### Configure ORDS for the target database
+### Configure ords for the target database
 # Set target DB's environment information
 DBAdmPwd=${VALUE_PW}
 DBSystemIP=${VALUE_IP}
@@ -45,7 +45,7 @@ DBName=`echo ${DBSrv} | awk -F. '{print $1}'`
 #echo $DBSrv
 #echo $DBName
 
-# Check if ORDS is already setup or not.
+# Check if ords is already setup or not.
 ords_check=`sqlplus -s sys/"${DBAdmPwd}"@${DBSystemIP}/${DBSrv} as sysdba @ords_pu_check | sed -e '/^$/d' -e 's/^[ \t]*//'`
 if [ "$ords_check" = "0" ]; then
   echo "ORDS has not configured for $DBName yet"
@@ -63,7 +63,7 @@ cp pw_verify_base.sql pw_verify_back.sql
 sed -i -e "s/ToBeUpdated_PW_VERIFY_FUNC/$CURRENT_PW_VERIFY_FUNC/g" pw_verify_back.sql
 sqlplus -s sys/"${DBAdmPwd}"@${DBSystemIP}/${DBSrv} as sysdba @pw_verify_null
 
-# Setup ORDS for target DB
+# Setup ords for target DB
 cp ords_setup_base.exp ords_setup.exp
 sed -i -e "s/ToBeUpdated_DBAdmPwd/${DBAdmPwd}/g" ords_setup.exp
 sed -i -e "s/ToBeUpdated_DBSystemIP/${DBSystemIP}/g" ords_setup.exp

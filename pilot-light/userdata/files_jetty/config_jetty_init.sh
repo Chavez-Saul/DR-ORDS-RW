@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # This script requires 1 argument 
-# Arg1 : port for access to ORDS
+# Arg1 : port for access to ords
 
-### Port for ORDS on Compute Instance
+### Port for ords on Compute Instance
 ComPort=$1
 
 ### Debug

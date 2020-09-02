@@ -2,9 +2,9 @@
 
 # This script requires 2 arguments
 # Arg1 : Compute FQDN (with customer's public domain)
-# Arg2 : port for access to ORDS
+# Arg2 : port for access to ords
 
-### Configure ORDS for the target database
+### Configure ords for the target database
 # Set Variables 
 ComFQDN=$1
 ComPort=$2

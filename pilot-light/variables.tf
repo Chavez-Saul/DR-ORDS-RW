@@ -121,8 +121,14 @@ variable lb_shape {
   default     = "100Mbps"
 }
 
-variable "ZoneName" {
+variable "zonename" {
   type        = string
   description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
   default     = ""
+}
+
+variable "port" {
+  type        = string
+  description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
+  default     = "8443"
 }

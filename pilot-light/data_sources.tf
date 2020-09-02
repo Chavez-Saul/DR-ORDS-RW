@@ -9,7 +9,7 @@ data "oci_identity_tenancy" "tenancy" {
 data "oci_identity_regions" "home-region" {
   filter {
     name   = "key"
-    values = ["${data.oci_identity_tenancy.tenancy.home_region_key}"]
+    values = [data.oci_identity_tenancy.tenancy.home_region_key]
   }
 }
 

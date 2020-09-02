@@ -37,10 +37,6 @@ read -p "Enter path to your API private key [${PathToYourApiPrivateKey}]: " APIP
 read -p "Enter your compartment's OCID [${TF_VAR_compartment_ocid}]: " CID 
 echo ""
 
-echo "***** Target Database *****"
-read -p "Enter the database host's IP address [${TF_VAR_target_db_ip}]: " DBHOSTIP
-read -p "Enter the database service name [${TF_VAR_target_db_srv_name}]: " DBSRVNAME
-echo ""
 
 echo "***** Compute Instance *****"
 #read -p "Enter the region <us-phoenix-1|us-ashburn-1|eu-frankfurt-1|uk-london-1|ca-toronto-1> [${TF_VAR_region}]: " REGION
@@ -55,10 +51,11 @@ read -p "Enter 0 to run Jetty (ORDS standalone mode), or 1 to run Tomcat [${TF_V
 read -p "Enter 0 to access with FQDN (hostname.yourdomain), or 1 to access with public IP address [${TF_VAR_Secure_FQDN_access}]: " COMACCESS
 
 echo "***** Primary Region *****"
-read -p "Enter the region <us-phoenix-1|us-ashburn-1|eu-frankfurt-1|uk-london-1|ca-toronto-1>  [${TF_VAR_region}]: " PRIMARY
+read -p "Enter the primary region <us-phoenix-1|us-ashburn-1|eu-frankfurt-1|uk-london-1|ca-toronto-1>  [${TF_VAR_region}]: " PRIMARY
 
 echo "***** Standby Region *****"
-read -p "Enter the primary region [${TF_VAR_dr_region}]: " STANDBY
+echo "Choose a region that is different from the primary region"
+read -p "Enter the standby region <us-phoenix-1|us-ashburn-1|eu-frankfurt-1|uk-london-1|ca-toronto-1>  [${TF_VAR_dr_region}]: " STANDBY
 
 if [ "${COMACCESS:-${TF_VAR_Secure_FQDN_access}}" = "0" ]; then
   read -p "Enter the domain name [${TF_VAR_ZoneName}]: " ZONENAME
@@ -96,12 +93,6 @@ if [ ! "$no_env-vars" = "true" ]; then
           TF_VAR_compartment_ocid* )    echo "export TF_VAR_compartment_ocid=${CID:=${TF_VAR_compartment_ocid}}"             >> .new_env-vars_${stamp};;
           TF_VAR_target_db_ip* )        echo "export TF_VAR_target_db_ip=${DBHOSTIP:=${TF_VAR_target_db_ip}}"                >> .new_env-vars_${stamp};;
           TF_VAR_target_db_srv_name* )  echo "export TF_VAR_target_db_srv_name=${DBSRVNAME:=${TF_VAR_target_db_srv_name}}"   >> .new_env-vars_${stamp};;
-          TF_VAR_AD* )                  echo "export TF_VAR_AD=${AD:=${TF_VAR_AD}}"                                          >> .new_env-vars_${stamp};;
-          TF_VAR_InstanceOSVersion* )   echo "export TF_VAR_InstanceOSVersion=${OLVER:=${TF_VAR_InstanceOSVersion}}"         >> .new_env-vars_${stamp};;
-          TF_VAR_subnet_ocid* )         echo "export TF_VAR_subnet_ocid=${SUBNETID:=${TF_VAR_subnet_ocid}}"                  >> .new_env-vars_${stamp};;
-          TF_VAR_ComputeDisplayName* )  echo "export TF_VAR_ComputeDisplayName=${COMDISPNAME:=${TF_VAR_ComputeDisplayName}}" >> .new_env-vars_${stamp};;
-          TF_VAR_InstanceName* )        echo "export TF_VAR_InstanceName=${COMHOSTNAME:=${TF_VAR_InstanceName}}"             >> .new_env-vars_${stamp};;
-          TF_VAR_InstanceShape* )       echo "export TF_VAR_InstanceShape=${COMSHAPE:=${TF_VAR_InstanceShape}}"              >> .new_env-vars_${stamp};;
           TF_VAR_com_port* )            echo "export TF_VAR_com_port=${COMPORT:=${TF_VAR_com_port}}"                         >> .new_env-vars_${stamp};;
           TF_VAR_web_srv* )             echo "export TF_VAR_web_srv=${WEBSRV:=${TF_VAR_web_srv}}"                            >> .new_env-vars_${stamp};;
           TF_VAR_Secure_FQDN_access* )  echo "export TF_VAR_Secure_FQDN_access=${COMACCESS:=${TF_VAR_Secure_FQDN_access}}"   >> .new_env-vars_${stamp};;
@@ -136,12 +127,6 @@ else
   echo "export TF_VAR_target_db_ip=${DBHOSTIP:=${TF_VAR_target_db_ip}}"                >> env-vars
   echo "export TF_VAR_target_db_srv_name=${DBSRVNAME:=${TF_VAR_target_db_srv_name}}"   >> env-vars
   echo "export TF_VAR_region=${REGION:=${TF_VAR_region}}"                              >> env-vars
-  echo "export TF_VAR_AD=${AD:=${TF_VAR_AD}}"                                          >> env-vars
-  echo "export TF_VAR_InstanceOSVersion=${OLVER:=${TF_VAR_InstanceOSVersion}}"         >> env-vars
-  echo "export TF_VAR_subnet_ocid=${SUBNETID:=${TF_VAR_subnet_ocid}}"                  >> env-vars
-  echo "export TF_VAR_ComputeDisplayName=${COMDISPNAME:=${TF_VAR_ComputeDisplayName}}" >> env-vars
-  echo "export TF_VAR_InstanceName=${COMHOSTNAME:=${TF_VAR_InstanceName}}"             >> env-vars
-  echo "export TF_VAR_InstanceShape=${COMSHAPE:=${TF_VAR_InstanceShape}}"              >> env-vars
   echo "export TF_VAR_com_port=${COMPORT:=${TF_VAR_com_port}}"                         >> env-vars
   echo "export TF_VAR_web_srv=${WEBSRV:=${TF_VAR_web_srv}}"                            >> env-vars
   echo "export TF_VAR_Secure_FQDN_access=${COMACCESS:=${TF_VAR_Secure_FQDN_access}}"   >> env-vars
@@ -151,26 +136,25 @@ else
   echo "export TF_VAR_URL_APEX_file=${URLAPEX:=${TF_VAR_URL_APEX_file}}"               >> env-vars
   echo "export TF_VAR_APEX_install_mode=${APEXINSTMODE:=${TF_VAR_APEX_install_mode}}"  >> env-vars
   echo "export TF_VAR_private_key_path=\${PathToYourApiPrivateKey}"                    >> env-vars
-  echo "export TF_VAR_ssh_public_key=\${PathToYourSshPublicKey} 2>/dev/null)"   >> env-vars
-  echo "export TF_VAR_ssh_private_key=\${PathToYourSshPrivateKey} 2>/dev/null)" >> env-vars
-  echo "export TF_VAR_api_private_key=\${PathToYourApiPrivateKey} 2>/dev/null)" >> env-vars
+  echo "export TF_VAR_ssh_public_key=\${PathToYourSshPublicKey} 2>/dev/null)"          >> env-vars
+  echo "export TF_VAR_ssh_private_key=\${PathToYourSshPrivateKey} 2>/dev/null)"        >> env-vars
+  echo "export TF_VAR_api_private_key=\${PathToYourApiPrivateKey} 2>/dev/null)"        >> env-vars
   echo "export TF_VAR_target_db_name=\`echo \$TF_VAR_target_db_srv_name|awk -F. '{print \$1}'\`" >> env-vars
-  echo "export TF_VAR_region=${PRIMARY:=${TF_VAR_region}}"                             >> env-vars
   echo "export TF_VAR_dr_region=${STANDBY:=${TF_VAR_dr_region}}"                       >> env-vars
 fi
 
 ### Checking retrun code
 if [ $? -eq 0 ];then
-  # generating outputs-ORDS.tf
+  # generating outputs-ords.tf
   if [ "${COMACCESS}" = "0" ] && [ "${APEXINSTMODE}" = "0" ]; then
-      cat <<EOF > outputs-ORDS.tf
+      cat <<EOF > outputs-ords.tf
 
 output "URL : APEX (FQDN)" {
   value = ["https://\${var.InstanceName}.\${element(concat(oci_dns_zone.ORDS-Zone.*.name, list("")), 0)}:\${var.com_port}/ords/\${var.target_db_name}/"]
 }
 EOF
   elif [ "${COMACCESS}" = "1" ] && [ "${APEXINSTMODE}" = "0" ]; then    
-      cat <<EOF > outputs-ORDS.tf
+      cat <<EOF > outputs-ords.tf
 
 output "URL : APEX (PublicIP)" {
   value = ["https://\${data.oci_core_vnic.InstanceVnic.public_ip_address}:\${var.com_port}/ords/\${var.target_db_name}/"]

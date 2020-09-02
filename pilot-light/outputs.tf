@@ -29,6 +29,7 @@ output "primary_load_balancer" {
   value = module.public_lb.dr_lb_ip
 }
 
+### ords Information
 output "InstancePrivateIP" {
   value = module.ords.InstancePrivateIP
 }
@@ -37,13 +38,18 @@ output "InstancePublicIP" {
   value = module.ords.InstancePublicIP
 }
 
+### Database Information
 output "DB_hostname" {
   value = module.database.db_hostname
 }
 
-output "drip" {
-  value = module.database.ip
+output "db_ip" {
+  value = module.database.db_node_private_ip
 }
-output "domain" {
+output "db_domain" {
   value = module.database.db_domain
+}
+
+output "URL_for_Apex" {
+  value = "http://${module.ords.InstancePublicIP}:${var.port}/ords/${module.database.pdb_name}.${module.database.db_domain}"
 }

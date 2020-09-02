@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script requires 2 arguments
-# Arg1 : port for access to ORDS
+# Arg1 : port for access to ords
 # Arg2 : Object Storage URL for Tomcat 8.5 tar.gz file
 
 # Set variables

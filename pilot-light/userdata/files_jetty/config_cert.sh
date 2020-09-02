@@ -8,7 +8,7 @@
 # Arg5 : Private Pem Key
 # Arg6 : Compute FQDN (with customer's public domain)
 
-### Configure ORDS for the target database
+### Configure ords for the target database
 # Set Variables 
 TenantID=$1
 CompartID=$2

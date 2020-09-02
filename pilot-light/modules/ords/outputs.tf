@@ -6,4 +6,3 @@ output "InstancePublicIP" {
   value = oci_core_instance.ORDS-Comp-Instance.public_ip
 }
 
-

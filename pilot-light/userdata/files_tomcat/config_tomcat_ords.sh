@@ -4,8 +4,8 @@
 # Arg1 : Target db's admin pw
 # Arg2 : Target db's IP address, whether public or private is ok as long as it is reachable from compute isntance
 # Arg3 : Target db's service name to connect
-# Arg4 : Compute IP address for ORDS
-# Arg5 : Compute port for access for ORDS
+# Arg4 : Compute IP address for ords
+# Arg5 : Compute port for access for ords
 # Arg6 : Object Storage URL for ords.war file
 
 # Set Variables
@@ -17,7 +17,7 @@ ComIP=$4
 ComPort=$5
 URL_ORDS_file=$6
 
-### Configure ORDS for the target database
+### Configure ords for the target database
 # Download ords.war
 curl -v -X GET -o ords.war ${URL_ORDS_file}
 
@@ -29,7 +29,7 @@ cp pw_verify_base.sql pw_verify_back.sql
 sed -i -e "s/ToBeUpdated_PW_VERIFY_FUNC/$CURRENT_PW_VERIFY_FUNC/g" pw_verify_back.sql
 sqlplus -s sys/"${DBAdmPwd}"@${DBSystemIP}/${DBSrv} as sysdba @pw_verify_null
 
-# Setup ORDS for target DB
+# Setup ords for target DB
 cp ords_setup_base.exp ords_setup.exp
 sed -i -e "s/ToBeUpdated_DBAdmPwd/${DBAdmPwd}/g" ords_setup.exp
 sed -i -e "s/ToBeUpdated_DBSystemIP/${DBSystemIP}/g" ords_setup.exp
