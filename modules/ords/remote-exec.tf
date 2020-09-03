@@ -126,7 +126,7 @@ resource "null_resource" "remote-exec_jetty-Secure-FQDN-Access" {
     }
 
     inline = [
-      "./config_cert.sh ${var.tenancy_ocid} ${var.compartment_id} ${var.user_ocid} ${var.fingerprint} \"${var.api_private_key}\" ${var.InstanceName}.${oci_dns_zone.ORDS-Zone[count.index].name}",
+      "./config_cert.sh ${var.tenancy_ocid} ${var.compartment_id} ${var.user_ocid} ${var.fingerprint} \"${var.private_key_path}\" ${var.InstanceName}.${oci_dns_zone.ORDS-Zone[count.index].name}",
       "./config_jetty_ca-ssl.sh ${var.InstanceName}.${oci_dns_zone.ORDS-Zone[count.index].name}",
     ]
   }

@@ -37,6 +37,7 @@ module dr_network {
   freeform_tags         = var.freeform_tags
   defined_tags          = var.defined_tags
   create_remote_peering = true
+  com_port              = var.com_port
 
   remote_peering_connection_id               = null
   remote_peering_connection_peer_region_name = null
@@ -83,6 +84,7 @@ module network {
   remote_app_vcn_cidr = var.dr_vcn_cidr_block
   freeform_tags       = var.freeform_tags
   defined_tags        = var.defined_tags
+  com_port            = var.com_port
 
   create_remote_peering                      = false
   remote_peering_connection_id               = module.dr_network.dr_remote_peering_id
@@ -153,7 +155,6 @@ module "ords" {
   ssh_public_key      = file(var.ssh_public_key_file)
   ssh_private_key     = file(var.ssh_private_key_file)
   ZoneName            = var.zonename
-  api_private_key     = var.private_key_path
   compartment_ocid    = var.compartment_ocid
   fingerprint         = var.fingerprint
   private_key_path    = var.private_key_path

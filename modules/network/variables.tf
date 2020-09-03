@@ -41,7 +41,7 @@ variable defined_tags {
 
 variable create_remote_peering {
   description = "If true, establish remote peering connection"
-  type        = bool 
+  type        = bool
 }
 
 variable igw_name {
@@ -137,3 +137,5 @@ variable remote_peering_connection_peer_region_name {
   type        = string
   description = "destination VCN rpg name"
 }
+
+variable "com_port" {}

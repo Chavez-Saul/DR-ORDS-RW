@@ -9,7 +9,6 @@ variable "target_db_ip" {}
 variable "target_db_srv_name" {}
 variable "target_db_name" {}
 variable "ZoneName" {}
-variable "api_private_key" {}
 variable "pdb_name" {}
 
 variable availability_domain {

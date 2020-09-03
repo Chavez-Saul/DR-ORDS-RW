@@ -26,7 +26,6 @@ export TF_VAR_URL_ORDS_file=https://objectstorage.uk-london-1.oraclecloud.com/p/
 # TF_VAR_web_srv : 0 => Jetty, 1 => Tomcat
 export TF_VAR_web_srv=0
 # TF_VAR_URL_tomcat_file : Object Storage URL for Tomcat 8.5 tar.gz file, required only when tomcat is used for Web server
-export TF_VAR_URL_tomcat_file=
 export TF_VAR_com_port=8888
 # TF_VAR_Secure_FQDN_access : 0 => Yes(Enabled FQDN access with CA SSL), 1 => No(Access w/ IP address)
 export TF_VAR_Secure_FQDN_access=1

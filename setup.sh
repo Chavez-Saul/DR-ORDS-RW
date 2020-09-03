@@ -39,8 +39,6 @@ echo ""
 
 echo "***** Compute Instance *****"
 read -p "Enter the Compute Instance's port [${TF_VAR_com_port}]: " COMPORT
-read -p "Enter 0 to run Jetty (ORDS standalone mode), or 1 to run Tomcat [${TF_VAR_web_srv}]: " WEBSRV
-read -p "Enter 0 to access with FQDN (hostname.yourdomain), or 1 to access with public IP address [${TF_VAR_Secure_FQDN_access}]: " COMACCESS
 
 echo "***** Primary Region *****"
 read -p "Enter the primary region <us-phoenix-1|us-ashburn-1|eu-frankfurt-1|uk-london-1|ca-toronto-1>  [${TF_VAR_region}]: " PRIMARY
@@ -49,16 +47,10 @@ echo "***** Standby Region *****"
 echo "Choose a region that is different from the primary region"
 read -p "Enter the standby region <us-phoenix-1|us-ashburn-1|eu-frankfurt-1|uk-london-1|ca-toronto-1>  [${TF_VAR_dr_region}]: " STANDBY
 
-if [ "${COMACCESS:-${TF_VAR_Secure_FQDN_access}}" = "0" ]; then
-  read -p "Enter the domain name [${TF_VAR_ZoneName}]: " ZONENAME
-fi
 echo ""
 
 echo "***** File location on Object Storage *****"
 read -p "Enter the URL for ORDS.war file [${TF_VAR_URL_ORDS_file}]: " URLORDS
-if [ "${WEBSRV:-${TF_VAR_web_srv}}" = "1" ]; then
-  read -p "Enter the URL for Tomcat 8.5 tar.gz file [${TF_VAR_URL_tomcat_file}]: " URLTOMCAT
-fi
 read -p "Enter the URL for APEX zip file [${TF_VAR_URL_APEX_file}]: " URLAPEX
 
 echo ""
@@ -86,11 +78,7 @@ if [ ! "$no_env-vars" = "true" ]; then
           TF_VAR_target_db_ip* )        echo "export TF_VAR_target_db_ip=${DBHOSTIP:=${TF_VAR_target_db_ip}}"                >> .new_env-vars_${stamp};;
           TF_VAR_target_db_srv_name* )  echo "export TF_VAR_target_db_srv_name=${DBSRVNAME:=${TF_VAR_target_db_srv_name}}"   >> .new_env-vars_${stamp};;
           TF_VAR_com_port* )            echo "export TF_VAR_com_port=${COMPORT:=${TF_VAR_com_port}}"                         >> .new_env-vars_${stamp};;
-          TF_VAR_web_srv* )             echo "export TF_VAR_web_srv=${WEBSRV:=${TF_VAR_web_srv}}"                            >> .new_env-vars_${stamp};;
-          TF_VAR_Secure_FQDN_access* )  echo "export TF_VAR_Secure_FQDN_access=${COMACCESS:=${TF_VAR_Secure_FQDN_access}}"   >> .new_env-vars_${stamp};;
-          TF_VAR_ZoneName* )            echo "export TF_VAR_ZoneName=${ZONENAME:=${TF_VAR_ZoneName}}"                        >> .new_env-vars_${stamp};;
           TF_VAR_URL_ORDS_file* )       echo "export TF_VAR_URL_ORDS_file=${URLORDS:=${TF_VAR_URL_ORDS_file}}"               >> .new_env-vars_${stamp};;
-          TF_VAR_URL_tomcat_file* )     echo "export TF_VAR_URL_tomcat_file=${URLTOMCAT:=${TF_VAR_URL_tomcat_file}}"         >> .new_env-vars_${stamp};;
           TF_VAR_URL_APEX_file* )       echo "export TF_VAR_URL_APEX_file=${URLAPEX:=${TF_VAR_URL_APEX_file}}"               >> .new_env-vars_${stamp};;
           TF_VAR_region* )              echo "export TF_VAR_region=${PRIMARY:=${TF_VAR_region}}"                             >> .new_env-vars_${stamp};;
           TF_VAR_dr_region*)            echo "export TF_VAR_dr_region=${STANDBY:=${TF_VAR_dr_region}}"                       >> .new_env-vars_${stamp};;
@@ -120,16 +108,12 @@ else
   echo "export TF_VAR_target_db_srv_name=${DBSRVNAME:=${TF_VAR_target_db_srv_name}}"   >> env-vars
   echo "export TF_VAR_region=${REGION:=${TF_VAR_region}}"                              >> env-vars
   echo "export TF_VAR_com_port=${COMPORT:=${TF_VAR_com_port}}"                         >> env-vars
-  echo "export TF_VAR_web_srv=${WEBSRV:=${TF_VAR_web_srv}}"                            >> env-vars
-  echo "export TF_VAR_Secure_FQDN_access=${COMACCESS:=${TF_VAR_Secure_FQDN_access}}"   >> env-vars
-  echo "export TF_VAR_ZoneName=${ZONENAME:=${TF_VAR_ZoneName}}"                        >> env-vars
   echo "export TF_VAR_URL_ORDS_file=${URLORDS:=${TF_VAR_URL_ORDS_file}}"               >> env-vars
-  echo "export TF_VAR_URL_tomcat_file=${URLTOMCAT:=${TF_VAR_URL_tomcat_file}}"         >> env-vars
   echo "export TF_VAR_URL_APEX_file=${URLAPEX:=${TF_VAR_URL_APEX_file}}"               >> env-vars
   echo "export TF_VAR_APEX_install_mode=${APEXINSTMODE:=${TF_VAR_APEX_install_mode}}"  >> env-vars
   echo "export TF_VAR_private_key_path=\${PathToYourApiPrivateKey}"                    >> env-vars
-  echo "export TF_VAR_ssh_public_key=\${PathToYourSshPublicKey} 2>/dev/null)"          >> env-vars
-  echo "export TF_VAR_ssh_private_key=\${PathToYourSshPrivateKey} 2>/dev/null)"        >> env-vars
+  echo "export TF_VAR_ssh_public_key_file=\${PathToYourSshPublicKey} 2>/dev/null)"          >> env-vars
+  echo "export TF_VAR_ssh_private_key_file=\${PathToYourSshPrivateKey} 2>/dev/null)"        >> env-vars
   echo "export TF_VAR_api_private_key=\${PathToYourApiPrivateKey} 2>/dev/null)"        >> env-vars
   echo "export TF_VAR_target_db_name=\`echo \$TF_VAR_target_db_srv_name|awk -F. '{print \$1}'\`" >> env-vars
   echo "export TF_VAR_dr_region=${STANDBY:=${TF_VAR_dr_region}}"                       >> env-vars

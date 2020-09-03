@@ -16,9 +16,6 @@ vcn_dns_label = "drx1"
 # Compute shape for bastion server
 bastion_server_shape = "VM.Standard2.1"
 
-# Compute shape for application servers
-app_server_shape = "VM.Standard2.1"
-
 # Database display name
 db_display_name = "ActiveDBSystem"
 
@@ -30,6 +27,4 @@ db_admin_password = "PPassw0rd##123"
 
 # shape for Load Balancer
 lb_shape = "100Mbps"
-
-
 
