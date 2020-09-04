@@ -2,6 +2,6 @@
 .terraform*
 assets*
 .idea*
-env-vars*
+env-var*
 state*
 setup.sh
