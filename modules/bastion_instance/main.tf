@@ -10,12 +10,6 @@ provider oci {
   alias = "destination"
 }
 
-locals {
-  # extract key name from the keypath
-  private_key = element(reverse(split("/", var.ssh_private_key_file)), 0)
-  public_key  = element(reverse(split("/", var.ssh_public_key_file)), 0)
-}
-
 resource oci_core_instance bastion_server {
   provider            = oci.destination
   availability_domain = var.availability_domain
@@ -30,7 +24,7 @@ resource oci_core_instance bastion_server {
   shape = var.shape
 
   metadata = {
-    ssh_authorized_keys = file(var.ssh_public_key_file)
+    ssh_authorized_keys = var.ssh_public_key_file
   }
 
   create_vnic_details {
@@ -52,23 +46,24 @@ resource oci_core_instance bastion_server {
     type        = "ssh"
     host        = oci_core_instance.bastion_server.public_ip
     user        = "opc"
-    private_key = file(var.ssh_private_key_file)
+    private_key = var.ssh_private_key_file
   }
 
   # upload the SSH keys used to access remote instances
   provisioner file {
-    source      = var.ssh_private_key_file
-    destination = ".ssh/${local.private_key}"
+    content     = var.ssh_private_key_file
+    destination = "~/.ssh/id_rsa"
   }
 
   provisioner file {
-    source      = var.ssh_public_key_file
-    destination = ".ssh/${local.public_key}"
+    content     = var.ssh_public_key_file
+    destination = "~/.ssh/id_rsa.pub"
   }
 
   provisioner remote-exec {
     inline = [
-      "chmod go-rwx .ssh/${local.private_key}",
+      "chmod 600 ~/.ssh/id_rsa",
+      "chmod 644 ~/.ssh/id_rsa.pub"
     ]
   }
 

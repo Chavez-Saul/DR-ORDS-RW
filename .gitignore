@@ -2,5 +2,6 @@
 .terraform*
 assets*
 .idea*
-*.bkp
+env-vars*
 state*
+setup.sh

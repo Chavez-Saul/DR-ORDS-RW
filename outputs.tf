@@ -6,11 +6,13 @@
 output "dr_bastion" {
   value = module.dr_bastion_instance.dr_instance_ip
 }
+
 ### Primary Region Outputs
 
 output "primary_bastion" {
   value = module.bastion_instance.dr_instance_ip
 }
+
 
 ### ords Information
 output "ords_public_ip" {
@@ -32,3 +34,4 @@ output "db_domain" {
 output "URL_for_Apex" {
   value = "https://${module.ords.InstancePublicIP}:${var.com_port}/ords/${module.database.pdb_name}"
 }
+

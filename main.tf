@@ -3,10 +3,6 @@
 
 terraform {
   required_version = ">= 0.12.0"
-
-  backend "local" {
-    path = "./state/terraform.tfstate"
-  }
 }
 
 locals {
@@ -127,7 +123,7 @@ module database {
   availability_domain = local.availability_domain
   display_name        = var.db_display_name
   ping_all_id         = module.network.dr_ping_all_id
-  ssh_public_keys     = file(var.ssh_public_key_file)
+  ssh_public_keys     = var.ssh_public_key_file
   db_system_shape     = var.db_system_shape
   db_admin_password   = var.db_admin_password
 
@@ -148,23 +144,20 @@ module "ords" {
   compartment_id      = var.compartment_ocid
   availability_domain = local.availability_domain
   tenancy_ocid        = var.tenancy_ocid
-  display_name        = "ORDS-Comp"
-  hostname_label      = "ords-comp"
+  display_name        = var.display_name
+  hostname_label      = var.hostname_label
   subnet_id           = module.network.dr_access_subnet_id
   source_id           = local.image_id
-  ssh_public_key      = file(var.ssh_public_key_file)
-  ssh_private_key     = file(var.ssh_private_key_file)
+  ssh_public_key      = var.ssh_public_key_file
+  ssh_private_key     = var.ssh_private_key_file
   ZoneName            = var.zonename
   compartment_ocid    = var.compartment_ocid
-  fingerprint         = var.fingerprint
-  private_key_path    = var.private_key_path
   region              = var.region
   subnet_ocid         = module.dr_network.dr_db_subnet_id
   target_db_admin_pw  = var.db_admin_password
   target_db_ip        = module.database.db_node_private_ip
   target_db_name      = module.database.db_hostname
   target_db_srv_name  = "${module.database.pdb_name}.${module.database.db_domain}"
-  user_ocid           = var.user_ocid
   pdb_name            = module.database.pdb_name
   URL_ORDS_file       = var.URL_ORDS_file
   URL_APEX_file       = var.URL_APEX_file

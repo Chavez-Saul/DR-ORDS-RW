@@ -110,24 +110,4 @@ resource "null_resource" "remote-exec_jetty-apex" {
   }
 }
 
-resource "null_resource" "remote-exec_jetty-Secure-FQDN-Access" {
-  depends_on = [null_resource.remote-exec_jetty-2]
 
-  # if web_srv=0(jetty) AND Secure_FQDN_access=0(enabling FQDN access), this resource is configured
-  count = (1 - var.web_srv) - var.Secure_FQDN_access * (1 - var.web_srv)
-
-  provisioner "remote-exec" {
-    connection {
-      agent       = false
-      timeout     = "30m"
-      host        = oci_core_instance.ORDS-Comp-Instance.public_ip
-      user        = "oracle"
-      private_key = var.ssh_private_key
-    }
-
-    inline = [
-      "./config_cert.sh ${var.tenancy_ocid} ${var.compartment_id} ${var.user_ocid} ${var.fingerprint} \"${var.private_key_path}\" ${var.InstanceName}.${oci_dns_zone.ORDS-Zone[count.index].name}",
-      "./config_jetty_ca-ssl.sh ${var.InstanceName}.${oci_dns_zone.ORDS-Zone[count.index].name}",
-    ]
-  }
-}

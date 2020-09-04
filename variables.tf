@@ -3,13 +3,13 @@
 
 # OCI Provider variables
 variable "tenancy_ocid" {}
-variable "user_ocid" {}
-variable "fingerprint" {}
-variable "private_key_path" {}
 variable "region" {}
-
-variable "URL_APEX_file" {}
-variable "URL_ORDS_file" {}
+variable "URL_APEX_file" {
+  description = "url for the apex.zip file in object storage"
+}
+variable "URL_ORDS_file" {
+  description = "url for the ords.war file in object storage"
+}
 
 # Deployment variables
 variable "compartment_ocid" {
@@ -53,16 +53,6 @@ variable "vcn_dns_label" {
   default     = "drvcn"
 }
 
-variable "lb_display_name" {
-  description = "Display label for Load Balancer"
-  default     = "dr_public_lb"
-}
-
-variable "is_private_lb" {
-  description = "Display label for Load Balancer"
-  default     = "false"
-}
-
 variable "ssh_public_key_file" {
   type        = string
   description = "path to public ssh key for all instances deployed in the environment"
@@ -77,25 +67,6 @@ variable bastion_server_shape {
   type        = string
   description = "oci shape for the instance"
   default     = "VM.Standard2.1"
-}
-
-variable "appserver_1_display_name" {
-  type        = string
-  description = "display name of app server1"
-  default     = "app1"
-}
-
-variable "appserver_2_display_name" {
-  type        = string
-  description = "display name of app server2"
-  default     = "app2"
-}
-
-
-variable app_server_shape {
-  type        = string
-  description = "oci shape for the instance"
-  default     = "VM.Standard2.2"
 }
 
 variable "db_display_name" {
@@ -115,12 +86,6 @@ variable "db_admin_password" {
   description = "password for SYS, SYSTEM, PDB Admin and TDE Wallet."
 }
 
-variable lb_shape {
-  type        = string
-  description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
-  default     = "100Mbps"
-}
-
 variable "zonename" {
   type        = string
   description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
@@ -131,4 +96,14 @@ variable "com_port" {
   type        = string
   description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
   default     = "8443"
+}
+
+variable "display_name" {
+  description = "display name of the instance"
+  default     = "ORDS-Comp"
+}
+
+variable "hostname_label" {
+  description = "hostname of the instance"
+  default     = "ords-comp"
 }
