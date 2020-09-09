@@ -63,3 +63,32 @@ variables:
 
   ssh_private_key_file:
     type: text
+
+outputGroups:
+  - title : Ip addresses
+    outputs:
+      - ${dr_bastion}
+      - ${primary_bastion
+      - ${ords_public_ip}
+      - ${db_ip}
+  - title: Apex
+    outputs:
+      - ${URL_for_Apex}
+
+outputs:
+  dr_bastion:
+    type: string
+    title: Rackware secondary bastion ip
+  primary_bastion:
+    type: string
+    title: Rackware primary bastion ip
+  ords_public_ip:
+    type: string
+    title: ords public ip
+  db_ip:
+    type: string
+    title: Database ip address
+  URL_for_Apex:
+    type: link
+    displayText: Apex url
+    title: Url for apex

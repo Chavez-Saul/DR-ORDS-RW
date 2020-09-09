@@ -63,14 +63,26 @@ resource oci_core_instance bastion_server {
   provisioner remote-exec {
     inline = [
       "chmod 600 ~/.ssh/id_rsa",
-      "chmod 644 ~/.ssh/id_rsa.pub"
+      "chmod 644 ~/.ssh/id_rsa.pub",
     ]
   }
 
-  provisioner remote-exec {
+}
+
+resource "null_resource" "remote-update" {
+
+  depends_on = [oci_core_instance.bastion_server]
+
+  provisioner "remote-exec" {
+    connection {
+      agent       = false
+      host        = oci_core_instance.bastion_server.public_ip
+      user        = "opc"
+      private_key = var.ssh_private_key_file
+    }
+
     inline = [
-      "sudo yum install python36-oci-cli -y",
+      "sudo sleep 10; sudo yum install python36-oci-cli -y",
     ]
   }
-
 }

@@ -95,7 +95,7 @@ variable "zonename" {
 variable "com_port" {
   type        = string
   description = "A template that determines the total pre-provisioned bandwidth (ingress plus egress). Choose appropriate value based on the shapes available for the tenancy"
-  default     = "8443"
+  default     = "8888"
 }
 
 variable "display_name" {
@@ -107,3 +107,5 @@ variable "hostname_label" {
   description = "hostname of the instance"
   default     = "ords-comp"
 }
+
+
