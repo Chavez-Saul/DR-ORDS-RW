@@ -38,13 +38,13 @@ variable "defined_tags" {
 
 variable "dr_vcn_cidr_block" {
   type        = string
-  description = "dr vcn cidr block"
+  description = "secondary vcn cidr block - Example: 192.168.x.x/16"
   default     = "10.0.0.0/16"
 }
 
 variable "vcn_cidr_block" {
   type        = string
-  description = "dr vcn cidr block"
+  description = "primary vcn cidr block - Example: 10.0.x.x/16"
   default     = "192.168.0.0/16"
 }
 

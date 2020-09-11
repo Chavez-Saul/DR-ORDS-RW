@@ -105,7 +105,7 @@ This solution provides a Network Architecture deployment to demonstrate Disaster
     2.  Make sure everything looks okay and then proceed
     ![](rackwaresaleplay/ResourceManager-Plan-3.PNG)
     
-    3.  Wait unitl the plan is green.
+    3.  Wait until the icon to turn green.
     ![](rackwaresaleplay/ResourceManager-Plan-4.PNG)
     
     ### Apply
@@ -113,12 +113,17 @@ This solution provides a Network Architecture deployment to demonstrate Disaster
     1.  Select plan from the dropdown menu.
     ![](rackwaresaleplay/ResourceManager-Apply-1.PNG)
     
-    2.  Wait unitl the plan is green.
+    2.  Wait unitl the icon to turn green.
     ![](rackwaresaleplay/ResourceManager-Apply-2.PNG)
 
     ### Destroy
 6.  First navigate to OCI Console and terminate the Standby database and once the termination is successfull then run the following command
 
+    1.  Select destroy from the dropdown menu.
+    ![](rackwaresaleplay/ResourceManager-Destroy.PNG)
+    
+    2.  Wait unitl the icon to turn green.
+    ![](rackwaresaleplay/ResourceManager-Destroy-2.PNG)
 
 ## Troubleshooting
    A possible issue you make face is not having enough resources. Test to make sure 

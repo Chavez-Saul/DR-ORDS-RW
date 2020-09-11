@@ -46,13 +46,13 @@ variables:
   region:
     type: oci:identity:region:name
     title: Region
-    description: The region in which to create all resources
+    description: The primary region in which to create all resources
     required: true
 
   dr_region:
     type: oci:identity:region:name
     title: DR Region
-    description: The region in which to create all resources
+    description: The secondary region in which to create all resources
     required: true
 
   com_port:
